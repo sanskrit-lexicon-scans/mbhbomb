@@ -1,7 +1,9 @@
 
+## mbhbomb: link target
 Ref: https://github.com/sanskrit-lexicon/PWK/issues/84
 
-PDF source: Google books Mahâbhârata épopée classique. India, 1850.
+## sources
+source: Google books Mahâbhârata épopée classique. India, 1850.
 Original from, University of Lausanne ; Digitized, Jul 26, 2010.
 
 6 volumes
@@ -12,7 +14,7 @@ Original from, University of Lausanne ; Digitized, Jul 26, 2010.
 * volume 5: https://books.google.com.py/books?id=2JhDAAAAcAAJ&source=gbs_navlinks_s
 * volume 6: https://books.google.com.py/books?id=7phDAAAAcAAJ&printsec=frontcover&source=gbs_atb#v=onepage&q&f=false
 
-## app
+## app0
 Provides access to pages based on external page number VNNNN,
   V = volume (1-6) NNNN external pdf page number in form 0001, 0002, ...
   <br/>page 8 of volume 1 : https://sanskrit-lexicon-scans.github.io/mbhbomb/app0/?10008
