@@ -78,18 +78,25 @@ function get_ipage_html(indexcur)
  return imageElt;
 }
 function display_ipage_html(indexes) {
- display_ipage_id(indexes);
- let html = get_ipage_html(indexes[1]);
- let elt=document.getElementById('ipage');
- if (html == null) {
-  html = '';
+ let defaultval,elt, html;
+ defaultval = null;
+ elt=document.getElementById('ipage');
+ if (indexes == defaultval) {
+  html = '<b>Page not found</b>';
+ } else {
+  display_ipage_id(indexes);
+  html = get_ipage_html(indexes[1]);
+  if (html == null) {
+   html = '';
+  }
  }
- elt.innerHTML = html;
+  elt.innerHTML = html;
 }
 
 function get_indexobjs_from_verse(verse) {
  // uses indexdata from index.js
- // verse is a 3-tuple of ints
+ // verse is a 3-tuple of ints OR null
+ let defaultval = null;
  let icur = -1;
  for (let i=0; i < indexdata.length; i++ ) {
   let obj = indexdata[i];
@@ -100,14 +107,9 @@ function get_indexobjs_from_verse(verse) {
    break;
   }
  }
- //console.log(verse,icur);
  let ans, prevobj, curobj, nextobj
  if (icur == -1) {
-  // default
-  prevobj = indexdata[2];
-  curobj = indexdata[3];
-  nextobj = indexdata[4];
-  //ans  = [indexdata[],indexdata[1],indexdata[2]];
+  ans = defaultval;
  } else {
   curobj = indexdata[icur];
   if (icur <= 2) {
@@ -121,8 +123,8 @@ function get_indexobjs_from_verse(verse) {
   }else {
    nextobj = curobj;
   }
+  ans = [prevobj,curobj,nextobj];
  }
- ans = [prevobj,curobj,nextobj];
  return ans;
 }
 
@@ -136,33 +138,32 @@ function get_verse_from_url() {
  // url = http://xyz.com?X ,
  // search = ?X
  let search = url.search;  // a string, possibly empty
- let defaultval = [0,0,0]; // default value
+ let defaultval = null; //[0,0,0]; // default value
  let nparm = 3;
  let iverse = [];
  let x = search.match(/^[?]([0-9]+),([0-9]+),([0-9]+)$/);
+ if (x == null) {
+  return defaultval;
+ }
  if (x != null) {
   // convert to ints parvan, adhyAya, verse
   for(let i=0;i<nparm;i++) {
    iverse.push(parseInt(x[i+1]));
   }
- }else {
-  // 3 -parameters
-  x = search.match(/^[?]([0-9]+),([0-9]+),([0-9]+)$/);
-  if (x == null) {
-   return defaultval;
-  }
-  // convert to ints
-  iverse.push(parseInt(x[0+1])) //parvan = p
-  iverse.push(parseInt(x[1+1])) //adhyAya = a
-  iverse.push(parseInt(x[2+1])) //verse
+  return iverse;
  }
- return iverse;
 }
 
-function display_ipage_url() {
+function display_ipage_url() {  
  let url_verse = get_verse_from_url();
  //console.log('url_verse=',url_verse);
- let indexobjs = get_indexobjs_from_verse(url_verse);
+ let defaultval = null;
+ let indexobjs;
+ if (url_verse == defaultval) {
+  indexobjs = defaultval;
+ }else {
+  indexobjs = get_indexobjs_from_verse(url_verse);
+ }
  //console.log('indexobjs=',indexobjs);
  display_ipage_html(indexobjs);
 }
