@@ -1,5 +1,6 @@
 # coding=utf-8
 """ make_js_index.py for mbhbomb -- all pages of the pdfs
+    Includes missing pages
 """
 from __future__ import print_function
 import sys, re, codecs
@@ -9,6 +10,7 @@ class Pagerec(object):
  """
 """ 
  def __init__(self,vol,page,xtra):
+  # xtra is either 0 or 'x' or 'y'
   self.vol = vol
   self.page = page
   self.xtra = xtra
@@ -18,7 +20,7 @@ class Pagerec(object):
    vpstr = '%d%04d' % (self.vol,self.page)
   else:
    # an extra page, - represent as deci
-   vpstr = '%d%04d.%d' % (self.vol,self.page,self.xtra)
+   vpstr = '%d%04d%s' % (self.vol,self.page,self.xtra)
   e = {
    'vp':vpstr
   }
@@ -52,9 +54,11 @@ if __name__ == "__main__":
   (1,624) : 2,
   (1,638) : 2,
   (1,664) : 2,
-  (2,288) : 4,
+  (2,288) : 2,
   (3,66) : 2,
-  (4,408) : 3,
+  (3,104) : 2,
+  (3,126) : 2,
+  (4,408) : 2,
   (4,570) : 2,
   (4,632) : 2,
   (4,638) : 2,
@@ -75,8 +79,8 @@ if __name__ == "__main__":
    # add missing pages
    if (v,p) in missing_dict:
     nextra = missing_dict[(v,p)]
-    for iextra in range(nextra):
-     pagerec = Pagerec(v,p,iextra + 1)
+    for extra in ('x','y'):
+     pagerec = Pagerec(v,p,extra)
      pagerecs.append(pagerec)
  outrecs = make_js(pagerecs)
  write_recs(fileout,outrecs)

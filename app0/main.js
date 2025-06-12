@@ -25,9 +25,9 @@ function display_ipage_id(indexes) {
  let sfx = m[3]; // rest, usu. empty string
 
  let title = `vol ${v}, extpage ${p}${sfx}`;
- if (sfx != '') {
-  title = title + ' page missing';
- }
+ //if (sfx != '') {
+ // title = title + ' page missing';
+ //}
  let html = `<p>${prevlink} <span class="nppage">${title}</span> ${nextlink}</p>`;
  let elt = document.getElementById('ipageid');
  elt.innerHTML = html;
@@ -62,15 +62,13 @@ pdfpages6  mbhbomb6-001.pdf  to  mbhbomb6-705.pdf
  //console.log('vp=',vp, v,p,sfx,q);
  //console.log(sfx == '')
  let pdf;
- if (sfx == '') {
-  if (v == '5') {
-   pdf = `pdfpages${v}/mbhbomb${v}-${q}.pdf`;
-  }else {
-   pdf = `pdfpages${v}/mbhbomb${v}-${q}.pdf`;
-  }
+ let sfxes = ['','x','y'];
+ if (sfxes.includes(sfx)) {
+  pdf = `pdfpages${v}/mbhbomb${v}-${q}${sfx}.pdf`;
  }else {
   pdf = null; //pages missing from pdf
  }
+
  //console.log('pdf=',pdf);
  return pdf;
 }
@@ -92,7 +90,7 @@ function get_ipage_html(indexcur) {
  return imageElt;
 }
 
-function display_ipage_html(indexes) {
+/*function display_ipage_html(indexes) {
  display_ipage_id(indexes);
  let html = get_ipage_html(indexes[1]);
  let elt=document.getElementById('ipage');
@@ -101,7 +99,22 @@ function display_ipage_html(indexes) {
  }
  elt.innerHTML = html;
 }
-
+*/
+function display_ipage_html(indexes) {
+ let defaultval,elt, html;
+ defaultval = null;
+ elt=document.getElementById('ipage');
+ if (indexes == defaultval) {
+  html = '<b>Page not found</b>';
+ } else {
+  display_ipage_id(indexes);
+  html = get_ipage_html(indexes[1]);
+  if (html == null) {
+   html = '';
+  }
+ }
+  elt.innerHTML = html;
+}
 
 function prev_vp_obj(icur) {
  let defaultobj = indexdata[0];
@@ -157,6 +170,7 @@ function get_indexobjs_from_verse(verse) {
  // uses indexdata from index.js
  // verse is a 1-tuple (vp)
  //console.log('get_indexobjs_from_verse:',verse);
+ let defaultval = null;
  let icur = -1;
  for (let i=0; i < indexdata.length; i++ ) {
   let obj = indexdata[i];
@@ -167,27 +181,26 @@ function get_indexobjs_from_verse(verse) {
  let ans, prevobj, curobj, nextobj
  if (icur == -1) {
   // default
-  prevobj = indexdata[0];
-  curobj = indexdata[0];
-  nextobj = indexdata[1];
+  ans = defaultval;
  } else {
   prevobj = prev_vp_obj(icur);
   curobj = indexdata[icur];
   nextobj = next_vp_obj(icur);
+  ans = [prevobj,curobj,nextobj];
  }
- ans = [prevobj,curobj,nextobj];
  return ans;
 }
 
 function get_verse_from_url() {
  /* return 1-tuple  derived from url search string.
-    Returns [0] on error
+    Returns null on error
 */
  let href = window.location.href;
  let url = new URL(href);
  let search = url.search;  // a string, possibly empty
- let defaultval = [0]; // default value
+ let defaultval = null; // default value
  let x = search.match(/^[?](.*)$/);
+ //console.log('get_verse_from_url: x=',x)
  if (x == null) {
   return defaultval;
  }
@@ -197,6 +210,7 @@ function get_verse_from_url() {
   //iverse.push(parseInt(x[i+1]));
   iverse.push(x[i+1]);
  }
+ //console.log('get_verse_from_url: iverse=',iverse)
  return iverse;
 }
 

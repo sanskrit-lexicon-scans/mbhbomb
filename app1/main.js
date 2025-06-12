@@ -2,13 +2,16 @@
 
 function makelink(indexobj,txt) {
  let href = window.location.href;
- //let url = new URL(href);
- //let search = url.search  // a string, possibly empty
- let base = href.replace(/app1.*$/,'');
- let vp= indexobj.vp
- let newsearch = `app0/?${vp}`;
- let newhref = base + newsearch;
- let html = `<a class="nppage" href="${newhref}"><span class="nppage">${txt}</span></a>`;
+ let html;
+ if (indexobj == null) {
+  html = '';
+ } else {
+  let base = href.replace(/app1.*$/,'');
+  let vp= indexobj.vp
+  let newsearch = `app0/?${vp}`;
+  let newhref = base + newsearch;
+  html = `<a class="nppage" href="${newhref}"><span class="nppage">${txt}</span></a>`;
+ }
  return html;
 }
 function display_ipage_id(indexes) {
@@ -46,13 +49,11 @@ function get_pdfurl_from_index(indexobj) {
  }else {
   q = p; // all 4 digits -- v is 5
  }
+ //console.log('vp=',vp,'v=',v,'p=',p,'sfx=',sfx,'q=',q); 
  let pdf;
- if (sfx == '') {
-  if (v == '5') {
-   pdf = `pdfpages${v}/mbhbomb${v}-${q}.pdf`;
-  }else {
-   pdf = `pdfpages${v}/mbhbomb${v}-${q}.pdf`;
-  }
+ let sfxes = ['','x','y'];
+ if (sfxes.includes(sfx)) {
+  pdf = `pdfpages${v}/mbhbomb${v}-${q}${sfx}.pdf`;
  }else {
   pdf = null; //pages missing from pdf
  }
@@ -93,6 +94,42 @@ function display_ipage_html(indexes) {
   elt.innerHTML = html;
 }
 
+function get_prevobj(curobj,icur,indexdata) {
+ let vp = curobj.vp;
+ let ans = null;  //default
+ let obj;
+ let maxidx = indexdata.length - 1;
+ let idx = icur;
+ while ((0 <= idx) && (idx <= maxidx)) {
+  obj = indexdata[idx];
+  if (obj.vp != curobj.vp) {
+   ans = obj;
+   break;
+  } else {
+   idx = idx - 1;
+  }
+ }
+ return ans;
+}
+
+function get_nextobj(curobj,icur,indexdata) {
+ let vp = curobj.vp;
+ let ans = null;  //default
+ let obj;
+ let maxidx = indexdata.length - 1;
+ let idx = icur;
+ while ((0 <= idx) && (idx <= maxidx)) {
+  obj = indexdata[idx];
+  if (obj.vp != curobj.vp) {
+   ans = obj;
+   break;
+  } else {
+   idx = idx + 1;
+  }
+ }
+ return ans;
+}
+
 function get_indexobjs_from_verse(verse) {
  // uses indexdata from index.js
  // verse is a 3-tuple of ints OR null
@@ -112,17 +149,10 @@ function get_indexobjs_from_verse(verse) {
   ans = defaultval;
  } else {
   curobj = indexdata[icur];
-  if (icur <= 2) {
-   prevobj = curobj;
-  } else {
-   prevobj = indexdata[icur - 1];
-  }
-  let inext = icur + 1;
-  if (inext < indexdata.length) {
-   nextobj = indexdata[inext];
-  }else {
-   nextobj = curobj;
-  }
+  // get previous object with a different pdfpage, or null
+  let prevobj = get_prevobj(curobj,icur,indexdata);
+  // get next object with a different pdfpage, or null
+  let nextobj = get_nextobj(curobj,icur,indexdata);
   ans = [prevobj,curobj,nextobj];
  }
  return ans;
