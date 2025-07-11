@@ -1,5 +1,5 @@
 
-## Mahâbhârata épopée classique. India, 1850, Bombay
+## Mahâbhârata, 1850, Bombay
 Ref: https://github.com/sanskrit-lexicon/PWK/issues/84
 
 ## sources
@@ -13,6 +13,8 @@ Original from, University of Lausanne ; Digitized, Jul 26, 2010.
 - volume 4: https://www.google.com/books/edition/Mah%C3%A2bh%C3%A2rata_%C3%A9pop%C3%A9e_classique/tZhDAAAAcAAJ?hl=en
 - volume 5: https://books.google.com.py/books?id=2JhDAAAAcAAJ&source=gbs_navlinks_s
 - volume 6: https://books.google.com.py/books?id=7phDAAAAcAAJ&printsec=frontcover&source=gbs_atb#v=onepage&q&f=false
+
+Title: Mahâbhârata épopée classique. (1850). India: (n.p.).
 
 ## app0
 Provides access to pages based on external page number VNNNN
