@@ -74,6 +74,11 @@ vol, page, parvan. adhy, fromv, tov ipage
    self.status = False
    self.status_message = 'Unexpected adhy: %s' % raw_adhy
    return
+  # skip 3 with adhyaya 248A
+  if raw_adhy == '248A':
+   self.status = False
+   self.status_message = ' Skip alternate 248A in parvan 12'
+   return
   # check fromv 
   m_fromv = re.search(parm_fromv,raw_fromv)
   if m_fromv == None:
@@ -161,8 +166,8 @@ def init_pagerecs(filein,filevol=None):
     print('Problem at line # %s:' % lnum)
     print('line=',line)
     print('message=',pagerec.status_message)
-    exit(1)
- print(len(recs),'Success: Page records read from',filein)
+    #exit(1) 
+ print(len(recs),'Page records read from',filein)
  return recs
 
 
